@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Dự Đoán Điểm</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #d3d3d3 url('https://i.pinimg.com/736x/d7/f1/5a/d7f15a31e2e076bc50fcc6e7db787f81.jpg') no-repeat center center;
+            background-size: cover;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            width: 50%;
+            margin: 50px auto;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #444;
+        }
+
+        /* Nút bấm */
+        a {
+            display: block;
+            margin: 10px auto;
+            padding: 12px;
+            background: linear-gradient(45deg, #6c757d, #495057);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            width: 250px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            background: linear-gradient(45deg, #495057, #343a40);
+            transform: scale(1.05);
+        }
+
+        /* Bố cục form chia thành 2 cột */
+        .form-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hệ Thống Dự Đoán Điểm Số Sinh Viên</h1>
+        <a href="/predict_page">📊 Dự Đoán Điểm Số</a>
+        <a href="/history_page">📜 Xem Lịch Sử Dự Đoán</a>
+        <a href="#" onclick="deleteHistory()">🗑 Xóa Lịch Sử</a>
+
+        <!-- Form nhập liệu chia 2 cột -->
+        <div class="form-container">
+            <div class="form-group">
+                <label for="name">Họ và Tên</label>
+                <input type="text" id="name" placeholder="Nhập họ tên">
+            </div>
+            <div class="form-group">
+                <label for="id">Mã Sinh Viên</label>
+                <input type="text" id="id" placeholder="Nhập mã sinh viên">
+            </div>
+        </div>
+
+        <div class="form-container">
+            <div class="form-group">
+                <label for="subject">Môn Học</label>
+                <input type="text" id="subject" placeholder="Nhập môn học">
+            </div>
+            <div class="form-group">
+                <label for="score">Điểm Trung Bình</label>
+                <input type="number" id="score" placeholder="Nhập điểm">
+            </div>
+        </div>
+
+        <button onclick="submitForm()">📩 Gửi Dự Đoán</button>
+    </div>
+
+    <script>
+        function deleteHistory() {
+            if (confirm('Bạn có chắc chắn muốn xóa lịch sử?')) {
+                fetch('/delete_history', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => alert(data.message))
+                .catch(error => alert("Lỗi khi xóa lịch sử: " + error));
+            }
+        }
+
+        function submitForm() {
+            alert("Dữ liệu đã gửi! (Chưa có backend xử lý)");
+        }
+    </script>
+</body>
+</html>

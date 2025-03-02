@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dự Đoán Điểm Số</title>
+    
+    <style>
+       body { 
+    font-family: Arial, sans-serif; 
+    text-align: center; 
+    background: #d3d3d3 url('https://i.pinimg.com/736x/d7/f1/5a/d7f15a31e2e076bc50fcc6e7db787f81.jpg') no-repeat center center;
+    background-size: cover;
+    margin: 0;
+    padding: 20px;
+}
+
+
+.container {
+    margin-top: 50px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 15px; 
+    width: 100%;
+}
+
+.form-group {
+    flex: 1;
+    min-width: 45%;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Nút dự đoán */
+button {
+    background: #5a5a5a;
+    color: white;
+    border: none;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+button:hover {
+    background: #424242;
+}
+
+/* Bảng lịch sử */
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+th {
+    background: #5a5a5a;
+    color: white;
+}
+
+    </style>
+    
+</head>
+<body>
+    <div class="container">
+        <h1>Dự Đoán Điểm Số G3</h1>
+        <form id="predictForm">
+            <input type="number" name="age" placeholder="Tuổi" required>
+            <input type="number" name="studytime" placeholder="Thời gian học" required>
+            <input type="number" name="absences" placeholder="Số lần nghỉ" required>
+            <input type="number" name="failures" placeholder="Thất bại" required>
+            <input type="number" name="G1" placeholder="Điểm G1" required>
+            <input type="number" name="G2" placeholder="Điểm G2" required>
+            <button type="submit">Dự Đoán</button>
+        </form>
+        <h2 id="result"></h2>
+        
+        <h2>Lịch Sử Dự Đoán</h2>
+        <table>
+            <tr>
+                <th>Tuổi</th>
+                <th>Thời gian học</th>
+                <th>Số lần nghỉ</th>
+                <th>Thất bại</th>
+                <th>G1</th>
+                <th>G2</th>
+                <th>Dự đoán G3</th>
+            </tr>
+            <tbody id="historyTable"></tbody>
+        </table>
+    </div>
+    <script>
+        document.getElementById("predictForm").addEventListener("submit", async function(event) {
+            event.preventDefault(); // Ngăn chặn reload trang
+        
+            let formData = new FormData(this);
+            let data = Object.fromEntries(formData.entries());
+        
+            // Chuyển đổi dữ liệu thành số (để tránh lỗi kiểu dữ liệu)
+            for (let key in data) {
+                data[key] = Number(data[key]);
+            }
+        
+            try {
+                let response = await fetch("/predict_web", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+        
+                let result = await response.json();
+        
+                // Sửa lỗi [object Object] bằng cách lấy đúng giá trị G3
+                document.getElementById("result").innerText = "Dự đoán G3: " + result.predicted_G3;
+        
+                // Thêm vào bảng lịch sử
+                let table = document.getElementById("historyTable");
+                let newRow = document.createElement("tr");
+        
+                newRow.innerHTML = `
+                    <td>${data.age}</td>
+                    <td>${data.studytime}</td>
+                    <td>${data.absences}</td>
+                    <td>${data.failures}</td>
+                    <td>${data.G1}</td>
+                    <td>${data.G2}</td>
+                    <td>${result.predicted_G3}</td>
+                `;
+        
+                table.prepend(newRow); // Thêm dòng mới vào đầu bảng lịch sử
+            } catch (error) {
+                console.error("Lỗi khi gửi request:", error);
+                document.getElementById("result").innerText = "Lỗi dự đoán!";
+            }
+        });
+        </script>
+        
+
+</body>
+</html>

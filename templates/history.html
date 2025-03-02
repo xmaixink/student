@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch Sử Dự Đoán</title>
+    <style>
+         body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #d3d3d3 url('https://i.pinimg.com/736x/d7/f1/5a/d7f15a31e2e076bc50fcc6e7db787f81.jpg') no-repeat center center;
+            background-size: cover;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+    
+        h2 {
+            color: #343a40;
+            font-size: 28px;
+        }
+    
+        table { 
+            width: 90%; 
+            margin: 20px auto; 
+            border-collapse: collapse; 
+            background: white;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+    
+        th, td { 
+            padding: 12px; 
+            border: 1px solid #ddd; 
+            text-align: center;
+        }
+    
+        th { 
+            background: linear-gradient(45deg, #007BFF, #0056b3);
+            color: white;
+            text-transform: uppercase;
+        }
+    
+        tr:nth-child(even) { 
+            background: #f8f9fa; 
+        }
+    
+        tr:hover {
+            background: #d4edda; 
+            transition: 0.3s;
+        }
+    
+        @media screen and (max-width: 768px) {
+            table {
+                width: 100%;
+                font-size: 14px;
+            }
+            
+            th, td {
+                padding: 8px;
+            }
+        }
+    </style>
+    
+</head>
+<body>
+    <h2>Lịch Sử Dự Đoán</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Tuổi</th>
+                <th>Thời gian học</th>
+                <th>Số lần nghỉ</th>
+                <th>Thất bại</th>
+                <th>G1</th>
+                <th>G2</th>
+                <th>Dự đoán G3</th>
+                <th>Mức độ rủi ro</th>
+                <th>Gợi ý cải thiện</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in history %}
+            <tr>
+                <td>{{ record.age }}</td>
+                <td>{{ record.studytime }}</td>
+                <td>{{ record.absences }}</td>
+                <td>{{ record.failures }}</td>
+                <td>{{ record.G1 }}</td>
+                <td>{{ record.G2 }}</td>
+                <td>{{ record.predicted_G3 }}</td> <!-- Dự đoán G3 -->
+                <td>{{ record.risk_level }}</td> <!-- Mức độ rủi ro -->
+                <td>{{ record.suggestion }}</td> <!-- Gợi ý cải thiện -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
